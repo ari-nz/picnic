@@ -1,0 +1,22 @@
+Package: picnic
+Title: Shows you where to go to have a picnic in level 3.1
+Version: 0.0.0.9000
+Authors@R: 
+    person("Ari", "Angelo", , "hello@ari.nz", role = c("aut", "cre")
+Description: Blah blah blah.
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Imports: 
+    devtools,
+    pkgload,
+    dplyr,
+    geojsonio,
+    leaflet,
+    magrittr,
+    rmapshaper,
+    sf,
+    shiny,
+    shinythemes

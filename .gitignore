@@ -1,0 +1,7 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+picnic.Rcheck/
+picnic*.tar.gz
+picnic*.tgz
