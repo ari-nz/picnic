@@ -1,7 +1,6 @@
-library(pkgload)
-#sapply(desc::desc_get_deps()$package,library, character.only=TRUE)
-library("devtools")
 library("pkgload")
+library("smoothr")
+library("devtools")
 library("dplyr")
 library("geojsonio")
 library("leaflet")
@@ -10,7 +9,7 @@ library("rmapshaper")
 library("sf")
 library("shiny")
 library("shinythemes")
-library("smoothr")
+
 
 
 dir_data = 'data'
