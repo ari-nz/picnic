@@ -10,6 +10,7 @@ library("rmapshaper")
 library("sf")
 library("shiny")
 library("shinythemes")
+library("smoothr")
 
 
 dir_data = 'data'
