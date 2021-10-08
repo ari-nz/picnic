@@ -1,14 +1,14 @@
 name: picnics
-title: picnics
+title:
 username:
 account: arinz
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 4819151
-bundleId: 5116019
+bundleId: 5116175
 url: https://arinz.shinyapps.io/picnics/
-when: 1633642509.93346
-lastSyncTime: 1633642509.93346
+when: 1633646284.60587
+lastSyncTime: 1633646284.60588
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: data/alchohol.geojson|data/parks.geojson|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.R
