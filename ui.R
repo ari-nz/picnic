@@ -13,11 +13,13 @@ ui = bootstrapPage(
 
                             column(width = 2,
 
-                                   sliderInput('distance', 'Distance (km)',min = 2,max=20,value =5,step=1),
                                    actionButton('reset', 'reset'),
+                                   sliderInput('park_size', 'How big do you like your parks?',min = 1,max=5,value =c(1,5),step=1),
+                                   sliderInput('distance', 'How far are you really willing to go? (km)',min = 1,max=20,value =5,step=1),
                                    actionButton('shortest_path', 'Show Shortest Path'),
-                                   actionButton('isochrone', 'Show isochrone'),
-                                   actionButton('add_record','Add Record'),
+                                   actionButton('closest_parks', 'Find me my parks!'),
+                                   checkboxInput('alcohol', 'Do you like Alcohol?')
+                                   # actionButton('isochrone', 'Show isochrone'),
                             ),
 
 

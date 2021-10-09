@@ -10,12 +10,17 @@ library("sf")
 library("shiny")
 library("shinythemes")
 library("shinyjs")
+library("osrm")
+library("nngeo")
+library("mapview")
 
 source('R/func-helpers.R')
 source('R/data-prep.R')
 
 source('R/obj-clicked_points.R')
+source('R/obj-routing.R')
 
+options(shiny.autoload.r=FALSE)
 
 
 
