@@ -6,10 +6,27 @@ ui = bootstrapPage(
                #tags$head(includeCSS("styles.css")),
 
                tabPanel("Picnics",
-                        sliderInput('distance', 'Distance (km)',min = 2,max=20,value =5,step=1),
-                        actionButton('reset', 'reset'),
-                        leaflet::leafletOutput('basemap',width = "100%", height = 400),
-                        verbatimTextOutput("cp")
+                        fluidRow(
+                            h1("Click on the map to start")
+                        ),
+                        fluidRow(
+
+                            column(width = 2,
+
+                                   sliderInput('distance', 'Distance (km)',min = 2,max=20,value =5,step=1),
+                                   actionButton('reset', 'reset'),
+                                   actionButton('add_record','Add Record'),
+                            ),
+
+
+                            column(width=10,
+                                   leaflet::leafletOutput('basemap',width = "100%", height = 400)
+                            )
+                        ),
+                        fluidRow(
+
+                            tableOutput("print_points")
+                        )
                )
 
     )

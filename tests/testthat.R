@@ -1,0 +1,5 @@
+library(testthat)
+# library(picnic)
+library(pkgload)
+pkgload::load_all()
+test_check("picnic")
