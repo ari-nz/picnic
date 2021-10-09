@@ -76,6 +76,10 @@ Points = R6::R6Class(
         #Print methods
         print = function() {
             cat("<Points>\n", sep = "")
+            print(private$clicked_points)
+            invisible(self)
+        },
+        get = function() {
             private$clicked_points
         },
         get_active = function(){

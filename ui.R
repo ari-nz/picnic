@@ -23,7 +23,7 @@ ui = bootstrapPage(
                             )
                         ),
                         fluidRow(
-                            verbatimTextOutput("cp")
+                            verbatimTextOutput("print_points")
                         )
                )
 

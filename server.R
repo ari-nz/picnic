@@ -3,10 +3,12 @@
 server <- function(input, output,session) {
 
     # clicked_points = reactiveVal(list())
+   p <- reactiveVal(Points$new())
 
-
-   output$cp = renderPrint({
-      points
+   output$print_points = renderPrint({
+      req(p)
+      browser()
+                  p$get()
    })
 
    output$basemap = leaflet::renderLeaflet({
@@ -15,8 +17,10 @@ server <- function(input, output,session) {
 
 
    observeEvent(input$basemap_click, {
-       points$add(input$basemap_click)
+      p$add(input$basemap_click)
    })
+
+
 
 
    refresh_map <- reactive({
