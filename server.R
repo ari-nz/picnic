@@ -12,27 +12,54 @@ server <- function(input, output,session) {
    observeEvent(input$basemap_click, {
       points()$add(input$basemap_click)
 
-      active_shape_ids(points()$get()$pointId)
-      active_marker_ids(points()$get()$pointId)
+      active_shape_ids(  c(active_shape_ids() , paste0("M", points()$latest_record$pointId)))
+      active_marker_ids( c(active_marker_ids(), paste0("C", points()$latest_record$pointId)))
 
       leafletProxy('basemap') %>%
          addMarkers(
             data = points()$latest_record,
             lng = ~lng,
             lat = ~lat,
-            layerId = ~pointId
+            layerId = ~paste0("M",pointId)
          ) %>%
          addCircles(
             data = points()$latest_record,
             lng = ~lng,
             lat = ~lat,
-            layerId = ~pointId,
+            layerId = ~paste0("C",pointId),
             weight = 1,
             radius = input$distance*1000,
             fill =FALSE,
             color = '#000000'
          )
 
+
+
+   })
+
+
+   observeEvent(input$shortest_path, {
+      route = points()$shortest_path
+
+
+      leafletProxy('basemap') %>%
+         leaflet::removeShape("shortestpath") %>%
+         leaflet::addPolylines(
+            data = route,
+            layerId = "shortestpath"
+         )
+
+
+   })
+   observeEvent(input$isochrone, {
+      chronos = points()$isochrone
+
+      leafletProxy('basemap') %>%
+         leaflet::removeShape(letters[1:3]) %>%
+         leaflet::addPolylines(
+            data = chronos,
+            layerId = letters[1:3]
+         )
 
 
    })
@@ -50,6 +77,7 @@ server <- function(input, output,session) {
    output$basemap = leaflet::renderLeaflet({
       lmap
    })
+
 
    refresh_map <- reactive({
       list(input$basemap_click,input$distance, input$reset)
@@ -94,11 +122,11 @@ server <- function(input, output,session) {
 
    observeEvent(input$reset,{
       points()$remove(seq(points()$total_records))
-
       leafletProxy('basemap') %>%
          removeShape(last_intersection_ids()) %>%
-         removeShape(active_shape_ids()) %>%
-         removeMarker(active_marker_ids())
+         removeShape(paste0("C",points()$get()$pointId)) %>%
+         removeMarker(paste0("M",points()$get()$pointId)) %>%
+         leaflet::removeShape("shortestpath")
    })
 
 

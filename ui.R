@@ -15,6 +15,8 @@ ui = bootstrapPage(
 
                                    sliderInput('distance', 'Distance (km)',min = 2,max=20,value =5,step=1),
                                    actionButton('reset', 'reset'),
+                                   actionButton('shortest_path', 'Show Shortest Path'),
+                                   actionButton('isochrone', 'Show isochrone'),
                                    actionButton('add_record','Add Record'),
                             ),
 

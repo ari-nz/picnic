@@ -9,6 +9,7 @@ library("rmapshaper")
 library("sf")
 library("shiny")
 library("shinythemes")
+library("shinyjs")
 
 source('R/func-helpers.R')
 source('R/data-prep.R')
