@@ -1,13 +1,11 @@
 
+library(dplyr)
+library(rmapshaper)
+library(sf)
 
 dir_data = 'data'
 fs_parks = file.path(dir_data, 'parks.rds')
 fs_alcho = file.path(dir_data, 'alchohol.rds')
-
-
-
-
-
 
 
 if(!file.exists(fs_parks)){

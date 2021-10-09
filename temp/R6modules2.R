@@ -1,17 +1,16 @@
 library(R6)
-library(dplyr)
+library(shiny)
 
-Points = R6::R6Class(
-    classname = 'demopoints',
-
+Person <- R6::R6Class(
+    "Person",
     private = list(
         clicked_points = tibble::tibble(
-            lat =numeric(),
-            lng = numeric(),
-            active = logical(),
-            pointId = integer()
+                lat =numeric(),
+                lng = numeric(),
+                active = logical(),
+                pointId = integer()
 
-        ),
+            ),
         reactiveDep = NULL,
         reactiveExpr = NULL,
         invalidate = function() {
@@ -73,9 +72,9 @@ Points = R6::R6Class(
         },
         get_active = function(){
             # cat("Active <Points>\n", sep = "")
-            if(nrow(private$clicked_points)>0){
+            if(nrow(s)>0){
                 private$clicked_points %>%
-                    dplyr::filter(active)
+                     dplyr::filter(active)
             } else {
                 private$clicked_points
             }
@@ -83,54 +82,33 @@ Points = R6::R6Class(
         }
 
 
-    ),
-
-    active = list(
-        total_records = function(value) {
-            if (missing(value)) {
-
-            }
-
-            nrow(private$clicked_points)
-        },
-        active_records = function(value) {
-            if (missing(value)) {
-
-            }
-
-            nrow(dplyr::filter(private$clicked_points,active))
-        },
-        latest_record = function(){
-            tail(private$clicked_points,1)
-        }
+        )
     )
-)
 
 
+    library(shiny)
 
+    ui <- fluidPage(
+        actionButton('cn','ChangeName'),
+        textOutput('name')
+    )
 
-#Reactive Shiny
-if(FALSE){
+    server <- function(input, output, session) {
+        pr <- Person$new()$reactive()
 
+        # The observer accesses the reactive expression
+        observeEvent(pr()$get(), {
+            message("Person changed. Name: ", str(pr()$get())  )
+        })
+        output$name = renderText({
+            str(pr()$get())
+        })
 
+        observeEvent(input$cn, {
+            cp1 = list(lat = -36.8900555751941, lng = 174.754028320313, .nonce = 0.878921042598185)
+            pr()$add(cp1)
+        })
 
-cp1 = list(lat = -36.8900555751941, lng = 174.754028320313, .nonce = 0.878921042598185)
-p =Points$new()
-p$add(cp1)
-pr <- p$reactive()
-# The observer accesses the reactive expression
-o <- observe({
-    message("Point added:")
-})
-shiny:::flushReact()
+    }
 
-#> Person changed. Name: Dean
-
-# Note that this is in isolate only because we're running at the console; in
-# typical Shiny code, the isolate() wouldn't be necessary.
-isolate(pr()$add(cp1))
-shiny:::flushReact()
-}
-
-
-
+    shinyApp(ui, server)

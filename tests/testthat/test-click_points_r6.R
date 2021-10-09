@@ -1,3 +1,5 @@
+
+
 test_that("expected_results", {
 
 
@@ -34,5 +36,15 @@ test_that("expected_results", {
     out = p$get_active()
 
     testthat::expect_equal(nrow(out), 1L)
+
+
+
+    testthat::expect_equal(p$total_records, 2L)
+    testthat::expect_equal(p$active_records, 1L)
+
+
+
+
+
 
 })

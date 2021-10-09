@@ -14,7 +14,8 @@ ui = bootstrapPage(
                             column(width = 2,
 
                                    sliderInput('distance', 'Distance (km)',min = 2,max=20,value =5,step=1),
-                                   actionButton('reset', 'reset')
+                                   actionButton('reset', 'reset'),
+                                   actionButton('add_record','Add Record'),
                             ),
 
 
@@ -23,7 +24,8 @@ ui = bootstrapPage(
                             )
                         ),
                         fluidRow(
-                            verbatimTextOutput("print_points")
+
+                            tableOutput("print_points")
                         )
                )
 
