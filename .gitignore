@@ -5,3 +5,7 @@
 picnic.Rcheck/
 picnic*.tar.gz
 picnic*.tgz
+temp/
+*.geojson
+*.gdb
+.Rproj.user/shared/notebooks*
