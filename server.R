@@ -8,8 +8,11 @@ server <- function(input, output,session) {
 
 
    observeEvent(input$basemap_click, {
-      points()$add(input$basemap_click)
-      points()$limit_records(2)
+      click = sf::st_sfc(sf::st_point(c(input$basemap_click$lng, input$basemap_click$lat)), crs = 4326)
+      if(sf::st_within(click,aucks,sparse = FALSE)[1]){
+         points()$add(input$basemap_click)
+         points()$limit_records(2)
+      }
    })
 
 
@@ -30,8 +33,9 @@ server <- function(input, output,session) {
 
 
    })
+
    observeEvent(input$closest_parks, {
-   #need to ensure routes been created
+      #need to ensure routes been created
       rte = route()
       sf::st_nearest_feature(rte$sp_env$midpoint, parks)
       nn_idx= unlist(nngeo::st_nn(rte$sp_env$midpoint, parks,k = 5,maxdist = 1000,progress = FALSE))
@@ -57,9 +61,9 @@ server <- function(input, output,session) {
    # })
 
 
-   output$print_points = renderTable({
-      points()$get()
-   })
+   # output$print_points = renderTable({
+   #    points()$get()
+   # })
 
    # observeEvent(input$add_record, {
    #    cp1 = list(lat = -36.8900555751941, lng = 174.754028320313, .nonce = 0.878921042598185)
@@ -120,11 +124,6 @@ server <- function(input, output,session) {
          )
 
 
-
-
-
-
-
       #Add overlaps if necessary
 
       if(nrow(pts)>=2){
@@ -159,19 +158,62 @@ server <- function(input, output,session) {
    })
 
    observeEvent(input$reset,{
-      points()$remove(seq(points()$total_records))
-      leafletProxy('basemap') %>%
-         removeShape(last_intersection_ids()) %>%
-         removeShape(paste0("C",points()$get()$pointId)) %>%
-         removeMarker(paste0("M",points()$get()$pointId)) %>%
-         leaflet::removeShape("shortestpath")
+      if(nrow(points()$get())>0){
+
+         points()$remove(seq(points()$total_records))
+         leafletProxy('basemap') %>%
+            removeShape(last_intersection_ids()) %>%
+            removeShape(paste0("C",points()$get()$pointId)) %>%
+            removeMarker(paste0("M",points()$get()$pointId)) %>%
+            leaflet::removeShape("shortestpath") %>%
+            leaflet::removeShape("midpoint")
+      }
    })
+
+
+
+   observeEvent(input$alcohol, {
+      if(input$alcohol == TRUE){
+
+         leafletProxy('basemap') %>%
+            leaflet::addPolygons(
+               data = alcho,
+               fillColor  = ~HOURCOL,
+               stroke=FALSE,
+               fillOpacity = 0.5,
+               layerId = ~paste0("alcho", GlobalID ),
+               label  = ~label,
+               labelOptions = labelOptions(direction = "bottom",
+                                           style = list(
+
+                                           ))
+
+            ) %>%
+            addLegend(
+               colors = unique(alcho$HOURCOL),
+               labels = unique(alcho$HOUROPS),
+               opacity = 1,
+               layerId  = 'alcholeg'
+            )
+      } else {
+         leafletProxy('basemap') %>%
+            removeShape(
+               ~paste0("alcho", GlobalID )
+            )
+      }
+   },ignoreInit = TRUE)
+
 
 
    session$onSessionEnded(function() {
       cat("Data at end of session:\n",
           paste(
              capture.output(dput(isolate(points()$get()))),
+             collapse='\n'
+          ),
+          "\n",
+          paste(
+             capture.output(isolate(points()$get())),
              collapse='\n'
           )
       )
