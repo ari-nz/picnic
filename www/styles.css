@@ -1,0 +1,9 @@
+.irs--shiny .irs-bar {
+  border-top: 1px solid #18bc9c !important;
+  border-bottom: 1px solid #18bc9c !important;
+  background: #18bc9c !important;
+}
+
+ .irs--shiny .irs-single, .irs-to, .irs-from{
+    background-color: #18bc9c !important;
+}
