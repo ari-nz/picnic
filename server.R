@@ -8,6 +8,14 @@ server <- function(input, output,session) {
    route = reactiveVal()
 
 
+
+   output$basemap = leaflet::renderLeaflet({
+
+      lmap
+   })
+
+
+
    observeEvent(input$basemap_click, {
       click = sf::st_sfc(sf::st_point(c(input$basemap_click$lng, input$basemap_click$lat)), crs = 4326)
       if(sf::st_within(click,aucks,sparse = FALSE)[1]){
@@ -17,9 +25,7 @@ server <- function(input, output,session) {
    })
 
 
-   output$blah = renderText(
-      input$park_size
-   )
+
 
 
    #Show hide groups to not re-render map.
@@ -160,10 +166,6 @@ server <- function(input, output,session) {
    #    points()$add(cp1)
    # })
 
-   output$basemap = leaflet::renderLeaflet({
-      lmap
-
-   })
 
 
    refresh_map <- reactive({
