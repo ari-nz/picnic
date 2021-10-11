@@ -22,8 +22,25 @@ if(!file.exists(fs_parks)){
     message("Valid geoms: ", 100*mean(sf::st_is_valid(parks)), "%")
     parks %>% sf::st_geometry_type( )%>% table()
     parks = parks[sf::st_is_valid(parks),]
+
+    parks$AREA = sf::st_area(parks)
+    parks = parks %>%
+        dplyr::filter(ParkExtentSHAPE_Area < quantile(parks$ParkExtentSHAPE_Area,c(0.999))) %>%
+        dplyr::mutate(GROUPING = floor(log10(as.numeric(AREA)))) %>%
+        dplyr::mutate(GROUPING = pmin(GROUPING,5)) %>%
+        dplyr::mutate(GROUPING = pmax(GROUPING,1)) %>%
+        dplyr::select(
+            GROUPING,
+            SAPPARK_DATADESCRIPTION,
+            geometry
+        ) %>%
+        dplyr::mutate(PID=paste0("PARK_",row_number()))
+
+
     saveRDS(parks, fs_parks)
 }
+
+
 if(!file.exists(fs_aucks)){
     aucks = sf::st_read(file.path(dir_data, 'raw-tas.gdb'))
 
@@ -34,7 +51,7 @@ if(!file.exists(fs_aucks)){
         sf::st_make_valid() %>%
         sf::st_transform(4326)
 
-    saveRDS(parks, fs_aucks)
+    saveRDS(aucks, fs_aucks)
 }
 
 
@@ -53,9 +70,9 @@ if(!file.exists(fs_alcho)){
 
     alcho = alcho %>%
         dplyr::mutate(HOUROPS = forcats::fct_lump_prop(HOURSOFOPERATION, prop = 0.1)) %>%
-        dplyr::mutate(HOUROPS =  forcats::fct_recode(HOUROPS, "10pm-7am / 7am-7pm" = "10pm to 7am during daylight saving and 7pm to 7am outside daylight saving")) %>%
+        dplyr::mutate(HOUROPS =  forcats::fct_recode(HOUROPS, "10pm-7am(NZDT)/7pm-7am(NZST)" = "10pm to 7am during daylight saving and 7pm to 7am outside daylight saving")) %>%
         dplyr::mutate(HOURCOL =  case_when(
-            HOUROPS == "10pm-7am(NZDT)/7am-7pm(NZST)" ~ "#c29f4c",
+            HOUROPS == "10pm-7am(NZDT)/7pm-7am(NZST)" ~ "#c29f4c",
             HOUROPS == "24 hours, 7 days a week" ~ "#b662d1",
             HOUROPS == "7pm to 7am daily" ~ "#d75e63",
             HOUROPS == "Other" ~ "#9b99bc"
@@ -73,11 +90,13 @@ if(!file.exists(fs_alcho)){
 
 cat(as.character(Sys.time()),' - loading alcho zones\n')
 alcho = readRDS(fs_alcho)
+
 cat(as.character(Sys.time()),' - loading parks\n')
 parks = readRDS(fs_parks)
+
 cat(as.character(Sys.time()),' - loading aucks\n')
-parks = readRDS(fs_aucks)
+aucks = readRDS(fs_aucks)
 
 sf_use_s2(TRUE)
 
-parks = parks %>% dplyr::filter(ParkExtentSHAPE_Area < quantile(parks$ParkExtentSHAPE_Area,c(0.999)))
+
