@@ -62,6 +62,14 @@ server <- function(input, output,session) {
 
 
    observeEvent(input$shortest_path, {
+
+      if(nrow(points()$get_active())<2){
+         shinyalert("Oops!", "You'll need to have at least 2 points chosen on the map ", type = "error")
+         return(NULL)
+      }
+
+
+
       route(Route$new(points()))
 
       rte = route()

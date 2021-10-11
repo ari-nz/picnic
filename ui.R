@@ -5,8 +5,7 @@ ui = bootstrapPage(
         includeCSS("www/styles.css"),
         includeScript("www/slider.js")
     ),
-    waiter::useWaiter(),
-    waiter::useHostess(),
+    shinyalert::useShinyalert(rmd = FALSE),
 
     navbarPage(theme = shinytheme("flatly"), collapsible = TRUE,
                HTML('<a style="text-decoration:none;cursor:default;color:#FFFFFF;" class="active" href="#">L3 with Picnics</a>'), id="nav",
