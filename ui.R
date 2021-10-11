@@ -4,6 +4,7 @@ ui = bootstrapPage(
                windowTitle = "L3 with Picnics",
 
                tags$head(
+                   includeCSS("www/gtag.html"),
                    includeCSS("www/styles.css"),
                    includeScript("www/slider.js")
                    ),
