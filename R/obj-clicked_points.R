@@ -62,12 +62,13 @@ Points = R6::R6Class(
         },
 
         remove = function(id){
-            private$clicked_points = dplyr::rows_update(
-                private$clicked_points,
-                tibble(pointId=id,active=FALSE)
-            )
-            private$invalidate()
-
+            if(!is.na(id)){# turns out that clickign a circle marker counts as a marker with an id of NA
+                private$clicked_points = dplyr::rows_update(
+                    private$clicked_points,
+                    tibble(pointId=id,active=FALSE)
+                )
+                private$invalidate()
+            }
         },
         get_active = function(){
             # cat("Active <Points>\n", sep = "")
@@ -120,30 +121,30 @@ Points = R6::R6Class(
         },
         latest_record = function(){
             tail(private$clicked_points,1)
-        },
+        }
 
-        shortest_path = function(){
-
-            if(self$active_records==2){
-                data = self$get_active()
-                pt1 = c(data$lng[1], data$lat[1])
-                pt2 = c(data$lng[2], data$lat[2])
-                route <- osrm::osrmRoute(
-                    src = pt1,
-                    dst = pt2,
-                    overview = "full",
-                    returnclass = "sf",
-                    osrm.profile='bike'
-                )
-
-            } else {
-                route=NULL
-            }
-            route
-
-
-
-         }#,
+        # shortest_path = function(){
+        #
+        #     if(self$active_records==2){
+        #         data = self$get_active()
+        #         pt1 = c(data$lng[1], data$lat[1])
+        #         pt2 = c(data$lng[2], data$lat[2])
+        #         route <- osrm::osrmRoute(
+        #             src = pt1,
+        #             dst = pt2,
+        #             overview = "full",
+        #             returnclass = "sf",
+        #             osrm.profile='bike'
+        #         )
+        #
+        #     } else {
+        #         route=NULL
+        #     }
+        #     route
+        #
+        #
+        #
+        #  },
         # isochrone = function(){
         #
         #

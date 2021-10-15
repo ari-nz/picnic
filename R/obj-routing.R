@@ -98,19 +98,8 @@ Route = R6::R6Class(
             route
 
 
-        }#,
-        # isochrone = function(distance){
-        #     if(missing(distance)){
-        #         distance=5000
-        #     }
-        #     message("Off getting isochrones")
-        #     iso1 = osrm::osrmIsometric(private$source, breaks = c(0,5)*1e3, osrm.profile='bike')
-        #     iso2 = osrm::osrmIsometric(private$dest,   breaks = c(0,5)*1e3, osrm.profile='bike')
-        #
-        #
-        #     list(iso1 = iso1, iso2=iso2)
-        #
-        # }
+        }
+
 
 
     )

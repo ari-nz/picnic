@@ -1,6 +1,5 @@
 library("pkgload")
 library("osrm")
-library("smoothr")
 library("devtools")
 library("dplyr")
 library("geojsonio")
@@ -13,9 +12,14 @@ library("shinythemes")
 library("nngeo")
 library("shinycssloaders")
 library("shinyalert")
+library("forcats")
 
+library("raster")
+library("terra")
+# library("smoothr")
 # library("mapview")
 # library("shinyjs")
+
 
 source('R/func-helpers.R')
 source('R/data-prep.R')
@@ -38,12 +42,16 @@ lmap = leaflet::leaflet() %>%
     addMapPane("parks", zIndex = 430) %>%
     addMapPane("alcho", zIndex = 440) %>%
     addMapPane("intersection", zIndex = 420) %>%
+    addMapPane("midcircle", zIndex = 450) %>%
     addLayersControl(
         overlayGroups = c(as.character(1:5)),
         options = layersControlOptions(
             collapsed = F
         )
     ) %>%    removeLayersControl()
+
+
+
 
 for (i in 1:5){
 

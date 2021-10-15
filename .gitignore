@@ -9,3 +9,4 @@ temp/
 *.geojson
 *.gdb
 .Rproj.user/shared/notebooks*
+rsconnect
